@@ -9,7 +9,11 @@ const Peer = {
 	accepted: null,
 
 	init: (user) => {
-		Peer.socket = io('https://piper-signaler.herokuapp.com/', {transports: ['websocket']});
+		// Peer.socket = io('https://piper-signaler.herokuapp.com/', {transports: ['websocket']});
+    Peer.socket = io(window.location.protocol + '//piper-signaler.herokuapp.com', {
+      'multiplex': false,
+      'path': '/'
+    });
 		Peer.socket.emit('connected', user);
 		Peer.socket.on('offer', Peer.onOffer);
 		Peer.socket.on('uniqueID', (uniqueID) => {
