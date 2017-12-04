@@ -1,4 +1,12 @@
 import io from 'socket.io-client';
+import 'webrtc-adapter/out/adapter';
+
+// const RTCSessionDescription = window.RTCSessionDescription ||
+//   window.mozRTCSessionDescription;
+// const RTCPeerConnection = window.RTCPeerConnection ||
+//   window.mozRTCPeerConnection || window.webkitRTCPeerConnection;
+// const RTCIceCandidate = window.RTCIceCandidate ||
+//   window.mozRTCIceCandidate;
 
 const Peer = {
 	socket: null,
