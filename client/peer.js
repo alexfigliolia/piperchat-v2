@@ -24,7 +24,6 @@ const Peer = {
 	accepted: null,
 
 	init: (user) => {
-		// Peer.socket = io('https://piper-signaler.herokuapp.com/', {transports: ['websocket']});
     // Peer.socket = io('window.location.protocol + '//piper-signaler.herokuapp.com'',
     //   {reconnect: true, transports : ['websocket'], path: '/socket.io'}
     // );
