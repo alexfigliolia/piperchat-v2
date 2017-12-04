@@ -22,3 +22,4 @@ react-meteor-data
 fourseven:scss
 seba:minifiers-autoprefixer
 peerlibrary:reactive-publish
+force-ssl
