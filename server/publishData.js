@@ -152,6 +152,10 @@ Meteor.onConnection(function(connection) {
   });
 });
 
+Meteor.startup(() => {
+  Presences.remove({});
+});
+
 // Meteor.startup(() => {
 //   const PORT = parseInt(process.env.SOCKET_PORT) || 3003;
 //   WebAppInternals.addStaticJs(`window.socketPort = ${PORT};`);
