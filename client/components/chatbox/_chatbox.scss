@@ -1,0 +1,190 @@
+.chatbox {
+	@include center;
+	position: fixed;
+	bottom: 0px;
+	left: 0;
+	width: 100%;
+	height: calc(100% - 50px);
+	transition-duration: 0.25s;
+	overflow: hidden;
+	z-index: 10;
+	@media #{$mq-670} {
+		left: 0px;
+		width: 400px;
+		height: 400px;
+		max-width: 400px;
+		max-height: 400px;
+	}
+	&>div {
+		@include center;
+		flex-direction: column;
+		height: 100%;
+		width: 100%;
+		align-items: flex-start;
+		&>.with {
+			height: 50px;
+			width: 100%;
+			@include center;
+			background: lighten($plite, 2.5%);
+			color: #fff;
+			@include headerShadow;
+			z-index: 3;
+			font-size: 1.25em;
+			position: relative;
+			@media #{$mq-957} {
+				border-top-left-radius: 5px;
+				border-top-right-radius: 5px;
+			}
+			&>.closer {
+				position: absolute;
+				top: 10px;
+				left: 10px;
+				height: 30px;
+				width: 30px;
+				padding: 0;
+				border-radius: 50%;
+				outline: none;
+				border: none;
+				background: #fff url('close.svg') no-repeat center;
+				background-size: 20px 20px;
+				@include buttonShadow;
+			}
+			&>.hide {
+				position: absolute;
+				top: 10px;
+				right: 10px;
+				height: 30px;
+				width: 30px;
+				padding: 0;
+				border-radius: 50%;
+				outline: none;
+				border: none;
+				background: url('down.svg') no-repeat center;
+				background-size: contain;
+				transition-duration: 0.3s;
+			}
+		}
+		&>.messages {
+			height: calc(100% - 100px);
+			width: 100%;
+			// @include center;
+			overflow: auto;
+			-webkit-overflow-scrolling: touch;
+			background: #fff;
+			@media #{$mq-957} {
+				border-right: 1px solid $plite;
+			}
+			&>div {
+				min-height: 100%;
+				// height: auto;
+				width: 100%;
+				@include center;
+				flex-direction: column;
+				justify-content: flex-start;
+				background: #fff;
+				padding-top: 10px;
+				// overflow-y: scroll;
+				// -webkit-overflow-scrolling: touch;
+				&>.message {
+					height: auto;
+					width: auto;
+					min-width: 80px;
+					max-width: 90%;
+					min-height: 30px;
+					padding:5px 10px;
+					@include center;
+					background: #EEF4F3;
+					color: #000;
+					align-self: flex-start;
+					border-radius: 5px;
+					@include buttonShadow;
+					margin: 0;
+					margin-left: 10px;
+					margin-bottom: 10px;
+				}
+				&>.message-mine {
+					background: lighten($plite, 10%);
+					color: #fff;
+					align-self: flex-end;
+					margin-left: 0;
+					margin-right: 10px;
+				}
+			}
+		}
+		&>.send-messages {
+			width: 100%;
+			height: 50px;
+			@include center;
+			&>textarea {
+				width: calc(100% - 50px);
+				max-width: calc(100% - 50px);
+				min-width: calc(100% - 50px);
+				height: 100%;
+				max-height: 100%;
+				min-height: 100%;
+				background: #EEF4F3;
+				color: #000;
+				outline: none;
+				border: none;
+				border-radius: 0;
+				padding: 0;
+				padding-left: 5px;
+				padding-top: 2.5px;
+			}
+			&>.send {
+				height: 100%;
+				width: 50px;
+				background: lighten($plite, 10%);
+				border: none;
+				outline: none;
+				padding: 0;
+				@include center;
+				transition-duration: 0.5s;
+				overflow: hidden;
+				border-radius: 0px;
+				&:hover {
+					background: lighten($plite, 15%);
+				}
+				&>img {
+					width: 20px;
+					height: auto;
+					transition-duration: 0.3s;
+				}
+			}
+			&>.fly {
+				&>img {
+					transform: translate(50px, -30px) rotate(-45deg);
+				}
+			}
+			&>.return {
+				&>img {
+					transform: translate(-50px, -30px) rotate(45deg);
+					transition-duration: 0s;
+				}
+			}
+			&>.came-back {
+				&>img {
+					transform: translate(0px, 0px) rotate(0deg);
+					transition-duration: 0.3s;
+				}
+			}
+		}
+	}
+}
+
+
+.chatbox-hide {
+	transform: translateY(calc(100% - 50px));
+	// height: 50px;
+	// bottom: 0px;
+	&>div {
+		&>.messages,
+		&>.send-messages {
+			// height: 0px;
+			// padding: 0px;
+			&>.messages {
+				// height: 0px;
+			}
+		}
+	}
+}

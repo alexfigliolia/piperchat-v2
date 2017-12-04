@@ -1,0 +1,50 @@
+.app-loader {
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100%;
+	max-height: 100vh;
+	overflow: hidden;
+	width: 100%;
+	@include backgroundPiper;
+	z-index: 20000900987;
+	@include center;
+	&>div {
+		@include center;
+    &>svg {
+      height: 100px;
+      width: auto;
+      animation: jump 1s infinite;
+    }
+	}
+}
+
+@keyframes jump {
+  0% { transform: scale(1) } 
+  50% { transform: scale(1.2) }
+  100% { transform: scale(1) }
+}
+
+.app-loader-hidden {
+	transform: translateY(-100%);
+	transition-duration: 0.5s;
+	transition-delay: 0.3s;
+	transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+  &>div {
+    transform: scale(0);
+    transition-duration: 0.3s;
+    transition-delay: 0s;
+  }
+}
+
+.app-loader-hidden-op {
+  opacity: 0;
+  transition-duration: 0.3s;
+  transition-delay: 0.3s;
+  transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+  &>div {
+    transform: scale(0);
+    transition-duration: 0.3s;
+    transition-delay: 0s;
+  }
+}

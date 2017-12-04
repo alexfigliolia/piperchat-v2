@@ -1,0 +1,312 @@
+.friend-list {
+	position: absolute;
+	top: 50px;
+	left: 0;
+	width: 70%;
+	height: calc(100% - 50px);
+	max-height: calc(100% - 50px);
+	background: #E3EBF0;
+	@include center;
+	@include rightShadow;
+	z-index: 10000;
+	transform: translateX(-110%);
+	transition-duration: 0.3s;
+	overflow: hidden;
+	@media #{$mq-670} {
+		width: 400px;
+		height: calc(100% - 80px);
+		top: 80px;
+	}
+	&>div {
+		@include center;
+		justify-content: flex-start;
+		flex-direction: column;
+		height: 100%;
+		width: 100%;
+		transition-delay: 0s;
+		position: relative;
+		&>.list-header {
+			// position: fixed;
+			// top:0;
+			// left: 0;
+			z-index: 3;
+			@include center;
+			background: #EBEDF1;
+			flex-direction: column;
+			border-bottom: 1px solid #D0D7DB;
+			&>.header-buttons {
+				@include center;
+				flex-direction: row;
+				margin-bottom: 12.5px;
+				&>button {
+					width: 33.333333%;
+					height: 50px;
+					color: #fff;
+					background: #75D39C;
+					outline: none;
+					border: none;
+					@include center;
+					font-size: 0.85em;
+					border-radius: 0;
+					flex-direction: column;
+					&>.noty {
+						background: #EE3B3B;
+						color: #fff;
+						border-radius: 50%;
+						height: 20px;
+						width: 20px;
+						font-size: 0.85em;
+						@include center;
+					}
+				}
+				&>button:nth-of-type(2) {
+					background: #A4ABF3;
+				}
+				&>button:last-of-type {
+					background: #8BCFF1;
+				}
+			}
+			&>.add-friend {
+				width: 90%;
+				@include center;
+				height: 30px;
+				margin-bottom: 12.5px;
+				&>input {
+					font-size: 0.8em;
+					height: 25px;
+					width: 100%;
+					margin: 0;
+					padding: 0;
+					background: transparent;
+					border-radius: 100px;
+					background: #fff;
+					outline: none;
+					border: none;
+					text-align: center;
+				}
+			}
+		}
+		&>.list-container {
+			width: 300%;
+			// width: 100%;
+			height: calc(100% - 100px);
+			max-height: calc(100% - 100px);
+			overflow: hidden;
+			@include center;
+			flex-direction: row;
+			justify-content: flex-start;
+			transition-duration: 0.3s;
+			&>.list {
+				width: 100%;
+				// width: 100%;
+				height: 100%;
+				max-height: 100%;
+				overflow-y: scroll;
+				-webkit-overflow-scrolling: touch;
+				overflow-x: hidden;
+				display: block;
+				&>.contact {
+					width: 100%;
+					height: 50px;
+					@include center;
+					border-bottom: 1px solid #D0D7DB;
+					cursor: pointer;
+					position: relative;
+					// opacity: 0;
+					// transform: translateX(-100%);
+					transition-duration: 0.3s;
+					&:hover {
+						background: #fff;
+						transform: translateX(100px);
+						&>div>h3 {
+							color: #7A7E80;
+						}
+						&>.call-message>div>button {
+							transform: rotate(0deg) scale(1);
+							transition-delay: 0.1s;
+						}
+					}
+					&>div {
+						@include center;
+						width: 100%;
+						flex-direction: row;
+						justify-content: space-between;
+						width: 90%;
+						&>img {
+							height: 35px;
+							width: 35px;
+							border-radius: 50%;
+							overflow: hidden;
+							@include buttonShadow;
+							border: none;
+							outline: none;
+							margin: 0;
+							padding: 0;
+							@include center;
+							color: transparent;
+							background: url('userpl.svg') no-repeat center;
+							background-size: contain;
+						}
+						&>h3 {
+							color: #7A7E80;
+							font-weight: 500;
+							font-size: 1em;
+						}
+						&>.online {
+							height: 10px;
+							width: 10px;
+							background: green;
+							border-radius: 50%;
+						}
+					}
+					&>.call-message {
+						position: absolute;
+						top: 0;
+						left: 0;
+						height: calc(100% + 1px);
+						width: 100px;
+						@include center;
+						transform: translateX(-100%);
+						border-bottom: 1px solid #D0D7DB;
+						border-right: 1px solid #D0D7DB;
+						background: #fff;
+						&>div {
+							width: 80px;
+							height: 100%;
+							@include center;
+							justify-content: space-between;
+							&>button {
+								outline: none;
+								border: none;
+								height: 35px;
+								width: 35px;
+								background: blue;
+								border-radius: 50%;
+								background: #557AF0 url('chat.svg') no-repeat center;
+								background-size: 15px 15px;
+								transform: rotate(-180deg) scale(0);
+								transition-duration: 0.35s;
+								@include buttonShadow;
+								padding: 0;
+							}
+							&>button:last-of-type {
+								background: #4DDB90 url('call.svg') no-repeat center;
+								background-size: 17.5px 17.5px;
+							}
+						}
+					}
+				}
+				&>.has-new {
+					background: $plite;
+					&>div>h3 {
+						color: #FFF;
+					}
+					&>div>img {
+						background: #fff url('userpl.svg') no-repeat center;
+						background-size: contain;
+					}
+				}
+				&>.user {
+					width: 100%;
+					height: 50px;
+					@include center;
+					border-bottom: 1px solid #D0D7DB;
+					cursor: pointer;
+					position: relative;
+					// opacity: 0;
+					// transform: translateX(-100%);
+					transition-duration: 0.3s;
+					&>div {
+						@include center;
+						width: 100%;
+						flex-direction: row;
+						justify-content: space-between;
+						width: 90%;
+						&>img {
+							height: 35px;
+							width: 35px;
+							border-radius: 50%;
+							overflow: hidden;
+							@include buttonShadow;
+							border: none;
+							outline: none;
+							margin: 0;
+							padding: 0;
+							@include center;
+							color: transparent;
+							background: url('userpl.svg') no-repeat center;
+							background-size: contain;
+						}
+						&>h3 {
+							color: #7A7E80;
+							font-weight: 500;
+							font-size: 1em;
+							text-align: center;
+						}
+						&>.add-new {
+							width: 35px;
+							height: 35px;
+							@include center;
+							&>button {
+								height: 35px;
+								width: 35px;
+								outline: none; 
+								border: none;
+								border-radius: 50%;
+								background: #17B9AD url('addperson.svg') no-repeat 45% 50%;
+								background-size: 20px 20px;
+								@include buttonShadow;
+							}
+							&>.r-pending {
+								height: 35px;
+								width: 35px;
+								outline: none; 
+								border: none;
+								border-radius: 50%;
+								background: #6477D6 url('send.svg') no-repeat 55% 50%;
+								background-size: 17.5px 17.5px;
+								@include buttonShadow;
+							}
+						}
+						&>.accept-deny {
+							width: 80px;
+							height: 100%;
+							@include center;
+							justify-content: space-between;
+							&>button {
+								outline: none;
+								border: none;
+								height: 35px;
+								width: 35px;
+								background: blue;
+								border-radius: 50%;
+								background: #D43647 url('x.svg') no-repeat center;
+								background-size: 22.5px 22.5px;
+								@include buttonShadow;
+								padding: 0;
+							}
+							&>button:last-of-type {
+								background: $plite url('check.svg') no-repeat center;
+								background-size: 22.5px 22.5px;
+							}
+							&>.action-loading {
+								background: $plite url('loader.gif') no-repeat center;
+								background-size: 25px 25px;
+							}
+						}
+						}
+					}
+			}
+		}
+	}
+}
+
+.friend-list-show {
+	transform: translateX(0%);
+	&>div>.list>.contact,
+	&>div>.list>.user{	
+		transform: translateX(0%);
+		opacity: 1;
+		transition-delay: 0.05s;
+	}
+}
