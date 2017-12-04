@@ -14,6 +14,11 @@ export default class FriendList extends Component {
 		this.text = new Audio("iphone_notification.mp3");
 	}
 
+	componentWillReceiveProps(nextProps) {
+		if(nextProps.messages.length !== this.props.messages.length && 
+			 nextProps.messages[nextProps.messages.length - 1].from._id !== Meteor.userId()) this.text.play();
+	}
+
 	handleSearch = (e) => {
 		this.setState({text: e.target.value});
 		let arr;

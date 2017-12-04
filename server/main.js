@@ -181,11 +181,6 @@ Meteor.methods({
   'user.addNew'(id){
     check(id, String);
     const user = Meteor.users.findOne({_id: id});
-    if(user.newMessages === undefined){
-      Meteor.users.update({_id: id}, {
-        $set: { newMessages: [] }
-      });
-    }
     Meteor.users.update({_id: id}, {
       $push: { newMessages: Meteor.userId() }
     });

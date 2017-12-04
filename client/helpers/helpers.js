@@ -16,10 +16,11 @@ const checkSelfFriend = async (path) =>{
     const friends = path.buddyList[0].friends;
     const requests = path.buddyList[0].requests;
     const sent = path.buddyList[0].sentRequests;
-    const arr = friends.concat(requests, sent);
+    const arr = [...friends, ...requests, ...sent];
     const unique = [];
     for(let i = 0; i<users.length; i++) {
       let isUnique = true;
+      if(users[i]._id === Meteor.userId()) isUnique = false;
       for(let j = 0; j<arr.length; j++) {
         if(users[i]._id === arr[j]._id || users[i]._id === Meteor.userId()) {
           isUnique = false;

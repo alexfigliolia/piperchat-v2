@@ -23,6 +23,7 @@ export default class Chatbox extends Component {
       this.setState({width: this.refs.mc.clientWidth});
     }
     if(nextProps.messages.length !== this.props.messages.length) this.handleScroll();
+    if(nextProps.callingClasses === "calling calling-show receiving-call") this.hideChat();
   }
 
   getWidth = () => {
@@ -44,14 +45,8 @@ export default class Chatbox extends Component {
           console.log(error);
         } else {
           this.refs.m.value = '';
-          Meteor.call('user.addNew', this.props.with._id, (err, res) => {
-            if(err) console.log(err);
-          });
-          if(this.props.unread.indexOf(this.props.with._id) !== -1) {
-            Meteor.call('user.removeNew', this.props.with._id, (err, res) => {
-              if(err) console.log(err);
-            });
-          }
+          this.addNew();
+          this.removeNew();
         }
       });
     }
@@ -64,15 +59,29 @@ export default class Chatbox extends Component {
     setTimeout(() => { this.refs.send.classList.remove('fly', 'return', 'came-back')}, 600);
   }
 
-  hideChat = () => {
+  hideChat = async () => {
     this.setState((prevState, prevProps) => {
       return { classes: prevState.classes === "chatbox" ? "chatbox chatbox-hide" : "chatbox" }
     });
   }
 
 
-  handleScroll = () => {
+  handleScroll = async () => {
     setTimeout(() => { this.refs.mc.scrollTop = this.refs.mc.scrollHeight }, 50);
+  }
+
+  addNew = async () => {
+    Meteor.call('user.addNew', this.props.with._id, (err, res) => {
+      if(err) console.log(err);
+    });
+  }
+
+  removeNew = async () => {
+    if(this.props.unread.indexOf(this.props.with._id) !== -1) {
+      Meteor.call('user.removeNew', this.props.with._id, (err, res) => {
+        if(err) console.log(err);
+      });
+    }
   }
 
 	render = () => {
@@ -99,7 +108,11 @@ export default class Chatbox extends Component {
               onClick={this.hideChat}
               className="hide"></button>
           </div>
-      		<div className="messages" ref="mc" id="mc">
+      		<div 
+            className="messages" 
+            ref="mc" 
+            id="mc"
+            onMouseEnter={this.removeNew}>
       			<div>
               {
                 this.props.messages.map((message, i) => {

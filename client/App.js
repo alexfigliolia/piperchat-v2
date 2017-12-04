@@ -50,7 +50,7 @@ export default class App extends Component {
 
 	componentWillReceiveProps = (nextProps) => {
 		if(this.props !== nextProps) {
-			console.log(nextProps);
+			// console.log(nextProps);
 			if(nextProps.user === null || nextProps.user === undefined) {
 				this.needsAuth();
 			} else {
@@ -60,7 +60,7 @@ export default class App extends Component {
 				const unread = nextProps.user.newMessages;
 				if(unread !== undefined && unread.length !== 0 && buddyListExists) {
 		      sortFriendsUnread(unread, alphabetize(nextProps.buddyList[0].friends))
-		        .then(ns => this.setState({friends: ns}))
+		        .then(ns => this.setState({contacts: ns}))
 		        .catch(err => console.log(err));
 		    }
 			}
@@ -410,7 +410,8 @@ export default class App extends Component {
 							closeChat={this.closeChat}
 							messages={this.props.messages}
 							user={this.state.user}
-							unread={this.state.unread} />	
+							unread={this.state.unread}
+							callingClasses={this.state.callingClasses} />	
 					: this.state.loggedIn &&
 						this.state.currentChats.map((chat, i) => {
 						return <Chatbox

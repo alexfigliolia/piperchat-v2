@@ -14,7 +14,7 @@ function updateRV(val) {
 
 function updateFriends(id) {
   const list = BuddyLists.find({owner: id}).fetch();
-  const userFriends = list[0].friends;
+  const userFriends = list.length > 0 ? list[0].friends : [];
   const nv = [];
   for(let i = 0; i<userFriends.length; i++) {
     nv.push(userFriends[i]._id);
