@@ -16,7 +16,7 @@ export default class FriendList extends Component {
 
 	componentWillReceiveProps(nextProps) {
 		if(nextProps.messages.length !== this.props.messages.length && 
-			 nextProps.messages[nextProps.messages.length - 1].from._id !== Meteor.userId() && unread.length > 0) this.text.play();
+			 nextProps.messages[nextProps.messages.length - 1].from._id !== Meteor.userId() && nextProps.unread.length > 0) this.text.play();
 	}
 
 	handleSearch = (e) => {
