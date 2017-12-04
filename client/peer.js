@@ -1,12 +1,12 @@
 import io from 'socket.io-client';
 import 'webrtc-adapter/out/adapter';
-// import Response from 'meteor-node-stubs/node_modules/http-browserify/lib/response';
+import Response from 'meteor-node-stubs/node_modules/http-browserify/lib/response';
 
-// if (!Response.prototype.setEncoding) {
-//   Response.prototype.setEncoding = function(encoding) {
-//     // do nothing
-//   }
-// }
+if (!Response.prototype.setEncoding) {
+  Response.prototype.setEncoding = function(encoding) {
+    // do nothing
+  }
+}
 
 // const RTCSessionDescription = window.RTCSessionDescription ||
 //   window.mozRTCSessionDescription;
@@ -28,7 +28,7 @@ const Peer = {
     Peer.socket = io(window.location.protocol + '//piper-signaler.herokuapp.com',
       {reconnect: true, transports : ['websocket'], path: '/socket.io'}
     );
-    // Peer.socket = io(`http://localhost:${PORT}`,
+    // Peer.socket = io('http://localhost:9000',
     //   {reconnect: true, transports : ['websocket'], path: '/socket.io'}
     // );
 		Peer.socket.emit('connected', user);
