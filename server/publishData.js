@@ -153,6 +153,7 @@ Meteor.onConnection(function(connection) {
 });
 
 Meteor.startup(() => {
+  const PORT = parseInt(process.env.SOCKET_PORT) || 3003;
   const server = http.createServer();
   const io = socket_io(server, {
     'reconnect': true,
@@ -196,7 +197,7 @@ Meteor.startup(() => {
   });
 
   try {
-    server.listen(8080);
+    server.listen(PORT);
   } catch (e) {
     console.error(e);
   }
