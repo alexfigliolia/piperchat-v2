@@ -23,7 +23,11 @@ export default class Friend extends Component {
     }
 	}
 
-	call = () => this.props.call(this.props.id);
+	call = () => {
+		if(this.props.canMakeCalls) {
+			this.props.call(this.props.id);
+		}
+	}
 
   render = () => {
   	const online = this.checkOnline(this.props.id);
@@ -47,7 +51,7 @@ export default class Friend extends Component {
 						<button onClick={this.openChat}></button>
 						<button
 							style={{
-								opacity: online ? 1 : 0.25
+								opacity: online && this.props.canMakeCalls ? 1 : 0.25
 							}} 
 							onClick={this.call}></button>
 					</div>

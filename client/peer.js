@@ -8,14 +8,6 @@ if (!Response.prototype.setEncoding) {
   }
 }
 
-// const RTCSessionDescription = window.RTCSessionDescription ||
-//   window.mozRTCSessionDescription;
-// const RTCPeerConnection = window.RTCPeerConnection ||
-//   window.mozRTCPeerConnection || window.webkitRTCPeerConnection;
-// const RTCIceCandidate = window.RTCIceCandidate ||
-//   window.mozRTCIceCandidate;
-// const PORT = window.socketPort || 3003;
-
 const Peer = {
 	socket: null,
 	you: null,

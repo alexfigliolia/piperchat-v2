@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import update from 'immutability-helper';
 import Login from './components/login/Login';
 import Header from './components/header/Header';
-import { Dashboard } from './components/dashboard/Dashboard';
+import Dashboard from './components/dashboard/Dashboard';
 import FriendList from './components/friendList/FriendList';
 import Menu from './components/menu/Menu';
 import Chatbox from './components/chatbox/Chatbox';
@@ -28,6 +28,8 @@ export default class App extends Component {
       callingClasses: "calling",
       removeFriendClasses: "remove-friend",
       reportAbuseClasses: "report-abuse",
+      connectionErrorClasses: 'connection-error',
+      connectionError: 'Farts',
       contacts: [],
       requests: [],
       sentRequests: [],
@@ -35,7 +37,8 @@ export default class App extends Component {
       width: window.innerWidth,
       currentChats: [],
       currentSearch: '',
-      unread: []
+      unread: [],
+      canMakeCalls: false
 		}
 		this.loader = document.getElementById('appLoader');
 		this.stream = null;
@@ -290,6 +293,30 @@ export default class App extends Component {
   		console.log('on candidate');
   		if(Peer.accepted) this.setState({ callingClasses: "calling calling-show received" });
   	});
+  	this.socket.on('friendConnectionError', (err) => {
+  		this.displayConnectionError(err);
+  	});
+  	this.socket.on("connect", () => {
+  		this.setState({canMakeCalls: true});
+  	});
+  	this.socket.on("connect_failed", () => {
+  		this.setState({canMakeCalls: false});
+  	});
+  	this.socket.on('disconnect', () => {
+  		this.setState({canMakeCalls: false});
+  	});
+	}
+
+	displayConnectionError = (err) => {
+		this.endCall();
+		this.setState({
+			connectionErrorClasses: 'connection-error connection-error-show',
+      connectionError: err
+    });
+	}
+
+	dismissError = () => {
+		this.setState({ connectionErrorClasses: 'connection-error' });
 	}
 
   call = (id) => {
@@ -301,7 +328,7 @@ export default class App extends Component {
 				break;
 			}
 		}
-  	if(isOnline) {
+  	if(isOnline && this.state.canMakeCalls) {
   		Meteor.call('user.getPeerId', id, (err, res) => {
 	  		if(err) {
 	  			console.log(err);
@@ -333,6 +360,7 @@ export default class App extends Component {
 		Peer.receivingUser = null;
 		Peer.sendAnswerTo = null;
 		Peer.accepted = null;
+		Peer.peerConnection.close();
   	document.getElementById('you').muted = true;
   }
 
@@ -370,7 +398,10 @@ export default class App extends Component {
 					getLocalStream={this.getLocalStream}
 					stream={this.stream}
 					acceptCall={this.acceptCall}
-					setCallingScreen={this.setCallingScreen} />
+					setCallingScreen={this.setCallingScreen}
+					connectionErrorClasses={this.state.connectionErrorClasses}
+					connectionError={this.state.connectionError}
+					dismissError={this.dismissError} />
 
 				{
 					this.state.loggedIn &&
@@ -385,7 +416,8 @@ export default class App extends Component {
 						call={this.call}
 						states={this.props.states}
 						users={this.state.users}
-						unread={this.state.unread} />
+						unread={this.state.unread}
+						canMakeCalls={this.state.canMakeCalls} />
 				}
 
 				{

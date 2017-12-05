@@ -20,7 +20,8 @@ export default class List extends Component {
 								openChat={this.props.openChat}
 								call={this.props.call}
                 unread={this.props.unread}
-                hasUnread={this.props.unread.indexOf(dude._id) !== -1} />
+                hasUnread={this.props.unread.indexOf(dude._id) !== -1}
+                canMakeCalls={this.props.canMakeCalls} />
     				);
     			})
     		}

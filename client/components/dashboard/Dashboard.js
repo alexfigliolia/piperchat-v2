@@ -1,8 +1,9 @@
 import React from 'react';
 import You from './You';
 import Me from './Me';
+import ConnectionError from './ConnectionError';
 
-export const Dashboard = (props) => {
+const Dashboard = (props) => {
 	return (
 		<section className="dashboard">
 			<div>
@@ -20,18 +21,30 @@ export const Dashboard = (props) => {
 						getLocalStream={props.getLocalStream}
 						localStream={props.stream} />
 				}
+				{
+					props.loggedIn &&
+					<ConnectionError 
+						classes={props.connectionErrorClasses}
+						errorMessage={props.connectionError}
+						dismissError={props.dismissError} />
+				}
 			</div>
-			<div className={props.classes} id="csc">
-				<div className="loader-pic"></div>
-				<div className="answer-deny">
-					<button
-						onClick={props.endCall}
-						className="end-call"></button>
-					<button
-						onClick={props.acceptCall}
-						className="answer-call"></button>
+			{
+				props.loggedIn &&
+				<div className={props.classes} id="csc">
+					<div className="loader-pic"></div>
+					<div className="answer-deny">
+						<button
+							onClick={props.endCall}
+							className="end-call"></button>
+						<button
+							onClick={props.acceptCall}
+							className="answer-call"></button>
+					</div>
 				</div>
-			</div>
+			}
 		</section>
 	);
 }
+
+export default Dashboard;

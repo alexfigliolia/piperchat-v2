@@ -3,9 +3,13 @@
 	width: 100%;
 	@include center;
 	// position: relative;
+	@media #{$mq-670} {
+		height: calc(100% - 80px);
+	}
 	&>div {
 		@include center;
 		background: #4C4C4C;
+		position: relative;
 		&>#me {
 			position: absolute;
 			bottom: 20px;
@@ -178,4 +182,66 @@
 			transition-timing-function: none;
 		}
 	}
+}
+
+.dashboard>div>.connection-error {
+	position: absolute;
+	top: 0;
+	left: 0;
+	@include center;
+	height: 100%;
+	width: 100%;
+	visibility: hidden;
+	transform: translateY(100%) scale(0.5);
+	opacity: 0;
+	transition-duration: 0.4s;
+	&>div {
+		@include center;
+		flex-direction: column;
+		background: #fff;
+		width: 90%;
+		max-width: 350px;
+		border-radius: 5px;
+		@include headerShadow;
+		padding: 20px;
+		@media #{$mq-h-1024} {
+			padding: 30px;
+			max-width: 400px;
+		}
+		&>h3 {
+			margin: 0;
+			color: $plite;
+			@media #{$mq-h-1024} {
+				font-size: 1.5em;
+			}
+		}
+		&>p{
+			text-align: center;
+			@media #{$mq-h-1024} {
+				font-size: 1.25em;
+			}
+		}
+		&>button {
+			height: 40px;
+			width: 120px;
+			border: none;
+			outline: none;
+			border-radius: 2.5px;
+			background: $plite;
+			color: #fff;
+			@include buttonShadow;
+			margin-top: 10px;
+			@media #{$mq-h-1024} {
+				font-size: 1.25em;
+				height: 50px;
+				width: 140px;
+			}
+		}
+	}
+}
+
+.dashboard>div>.connection-error-show {
+	visibility: visible;
+	transform: translateY(0%) scale(1);
+	opacity: 1;
 }

@@ -105,7 +105,8 @@ export default class FriendList extends Component {
 							states={this.props.states}
 							openChat={this.openChat}
 							call={this.props.call}
-							unread={this.props.unread} />
+							unread={this.props.unread}
+							canMakeCalls={this.props.canMakeCalls} />
 						<List
 							for='requests'
 							requests={this.props.requests}
