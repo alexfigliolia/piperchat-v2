@@ -29,7 +29,7 @@ export default class App extends Component {
       removeFriendClasses: "remove-friend",
       reportAbuseClasses: "report-abuse",
       connectionErrorClasses: 'connection-error',
-      connectionError: 'Farts',
+      connectionError: '',
       contacts: [],
       requests: [],
       sentRequests: [],

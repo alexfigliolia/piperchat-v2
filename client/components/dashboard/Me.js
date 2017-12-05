@@ -61,11 +61,11 @@ export default class Me extends Component {
 	}
 
 	render = () => {
-		const hh = window.innerWidth < 670 ? 0 : 30;
+		const hh = window.innerWidth < 670 ? 50 : 80;
 		let x = this.state.left < 0 ? 0 : this.state.left;
-		let y = this.state.top < 0 ? hh : this.state.top;
+		let y = this.state.top < hh ? hh : this.state.top;
 		x = this.state.left > window.innerWidth - this.state.width ? window.innerWidth - this.state.width : x;
-		y = this.state.top > window.innerHeight - this.state.height ? window.innerHeight - (this.state.height + hh) : y;
+		y = this.state.top > window.innerHeight - this.state.height ? window.innerHeight - this.state.height : y;
 		return (
 			<video
 				onMouseDown={this.mouseDown}

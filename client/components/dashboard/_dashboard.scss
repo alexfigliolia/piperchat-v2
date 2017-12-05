@@ -2,14 +2,9 @@
 	height: calc(100% - 50px);
 	width: 100%;
 	@include center;
-	// position: relative;
-	@media #{$mq-670} {
-		height: calc(100% - 80px);
-	}
 	&>div {
 		@include center;
 		background: #4C4C4C;
-		position: relative;
 		&>#me {
 			position: absolute;
 			bottom: 20px;
@@ -184,7 +179,7 @@
 	}
 }
 
-.dashboard>div>.connection-error {
+.dashboard>.connection-error {
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -240,7 +235,7 @@
 	}
 }
 
-.dashboard>div>.connection-error-show {
+.dashboard>.connection-error-show {
 	visibility: visible;
 	transform: translateY(0%) scale(1);
 	opacity: 1;

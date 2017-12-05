@@ -21,13 +21,6 @@ const Dashboard = (props) => {
 						getLocalStream={props.getLocalStream}
 						localStream={props.stream} />
 				}
-				{
-					props.loggedIn &&
-					<ConnectionError 
-						classes={props.connectionErrorClasses}
-						errorMessage={props.connectionError}
-						dismissError={props.dismissError} />
-				}
 			</div>
 			{
 				props.loggedIn &&
@@ -42,6 +35,13 @@ const Dashboard = (props) => {
 							className="answer-call"></button>
 					</div>
 				</div>
+			}
+			{
+				props.loggedIn &&
+				<ConnectionError 
+					classes={props.connectionErrorClasses}
+					errorMessage={props.connectionError}
+					dismissError={props.dismissError} />
 			}
 		</section>
 	);
