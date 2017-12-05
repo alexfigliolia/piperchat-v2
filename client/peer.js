@@ -27,11 +27,7 @@ const Peer = {
 		Peer.socket.on('offer', Peer.onOffer);
 		Peer.socket.on('uniqueID', (uniqueID) => {
 			Meteor.call('user.updatePeerID', uniqueID, (error, result) => {
-		  	if(error) {
-		  		console.log(error);
-		  	} else {
-		  		Peer.uniqueID = uniqueID;
-		  	}
+		  	if(error) { console.log(error) } else { Peer.uniqueID = uniqueID }
 		  });
 		});
 		Peer.you = document.getElementById('you');
@@ -40,9 +36,7 @@ const Peer = {
     });
 	},
 
-	setLocalStream: (stream) => {
-		Peer.localStream = stream;
-	},
+	setLocalStream: (stream) => Peer.localStream = stream,
 
 	startCall: (id) => {
 		Peer.receivingUser = id;
@@ -136,7 +130,7 @@ const Peer = {
   onOffer: (offer) => {
     console.log('received offer');
     Peer.sendAnswerTo = offer.from;
-    if(Peer.accepted) Peer.initConn(Peer.createAnswer(offer));
+    if (Peer.accepted) Peer.initConn(Peer.createAnswer(offer));
   },
 
   onAnswer: (answer) => {

@@ -8,7 +8,7 @@ import Menu from './components/menu/Menu';
 import Chatbox from './components/chatbox/Chatbox';
 import RemoveFriend from './components/removeFriend/RemoveFriend';
 import ReportAbuse from './components/reportAbuse/ReportAbuse';
-import Peer from './peer';
+import Peer from './Peer';
 import { alphabetize, checkSelfFriend, sortFriendsUnread } from './helpers/helpers';
 
 export default class App extends Component {
@@ -53,7 +53,7 @@ export default class App extends Component {
 
 	componentWillReceiveProps = (nextProps) => {
 		if(this.props !== nextProps) {
-			// console.log(nextProps);
+			console.log(nextProps);
 			if(nextProps.user === null || nextProps.user === undefined) {
 				this.needsAuth();
 			} else {
@@ -107,6 +107,7 @@ export default class App extends Component {
     }
 	}
 
+	//ANIMATE THE ENTRACE TO THE APP
 	entrance = async () => {
 		setTimeout(() => { 
 			this.setState({ loginClasses: "login login-show login-hide" }) 
@@ -143,7 +144,7 @@ export default class App extends Component {
 		}
   }
 
-  //OPEN BUDDY LIST
+  //OPEN/CLOSE BUDDY LIST
   toggleFriends = () => {
   	if(!this.state.burgerToggle) this.toggleBurger();
     this.setState((prevState, prevProps) => {
@@ -156,6 +157,7 @@ export default class App extends Component {
     });
   }
 
+  //OPEN/CLOE REMOVE FRIEND UI
   toggleRemoveFriend = () => {
   	this.setState((prevState) => {
   		return {
@@ -172,6 +174,7 @@ export default class App extends Component {
   	});
   }
 
+  //OPEN/CLOSE REPORT ABUSE UI
 	toggleReportAbuse = () => {
   	this.setState((prevState) => {
   		return {
@@ -226,6 +229,7 @@ export default class App extends Component {
   	this.setState({user: newTempImage});
   }
 
+  //GET CAMERA & AUDIO STREAM
   getLocalStream = () => {
 		if (navigator.mediaDevices === undefined) navigator.mediaDevices = {};
 		if (navigator.mediaDevices.getUserMedia === undefined) {
@@ -250,6 +254,7 @@ export default class App extends Component {
 		});
 	}
 
+	//SET STREAM TO VIDEO TAGS
 	onInitConnect = (stream) => {
 		const me = document.querySelector('#me');
 		const you = document.querySelector('#you');
@@ -265,8 +270,10 @@ export default class App extends Component {
 		Peer.setLocalStream(stream);
 	}
 
+	//HANDLE CAMERA STREAM ERROR
 	onFailConnect = () => console.log('fail');
 
+	//INIT PEER OBJECT (WEBRTC EVENTS)
   initPeer = () => {
   	Peer.init(Meteor.userId());
   	this.socket = Peer.socket;
@@ -282,31 +289,20 @@ export default class App extends Component {
   		console.log('accepted');
   		Peer.accepted = true;
   		Meteor.call('user.getPeerId', id, (err, res) => {
-	  		if(err) {
-	  			console.log(err);
-	  		} else {
-	  			Peer.startCall(res);
-	  		}
+	  		if(err) { console.log(err) } else { Peer.startCall(res) }
 	  	});
   	});
   	this.socket.on('candidate', () => {
-  		console.log('on candidate');
   		if(Peer.accepted) this.setState({ callingClasses: "calling calling-show received" });
   	});
-  	this.socket.on('friendConnectionError', (err) => {
-  		this.displayConnectionError(err);
-  	});
-  	this.socket.on("connect", () => {
-  		this.setState({canMakeCalls: true});
-  	});
-  	this.socket.on("connect_failed", () => {
-  		this.setState({canMakeCalls: false});
-  	});
-  	this.socket.on('disconnect', () => {
-  		this.setState({canMakeCalls: false});
-  	});
+  	this.socket.on('friendConnectionError', (err) => this.displayConnectionError(err));
+  	this.socket.on("connect", () => this.setState({canMakeCalls: true}));
+  	this.socket.on("connect_failed", () => this.setState({canMakeCalls: false}));
+  	this.socket.on('disconnect', () => this.setState({canMakeCalls: false}));
+  	this.socket.on('endChat', (res) => this.terminatePeer());
 	}
 
+	//HANDLE CONNECTION ERROR
 	displayConnectionError = (err) => {
 		this.endCall();
 		this.setState({
@@ -315,10 +311,12 @@ export default class App extends Component {
     });
 	}
 
+	//DISMISS CONNECTION ERROR UI
 	dismissError = () => {
 		this.setState({ connectionErrorClasses: 'connection-error' });
 	}
 
+	//INITIATE A CALL => MAKE SURE FRIEND IS ONLINE => GET FRIEND'S PEERID
   call = (id) => {
   	let isOnline = false;
   	const onlineUsers = this.props.states;
@@ -339,12 +337,14 @@ export default class App extends Component {
   	}
   }
 
+  //SET UI FOR CALL => PASS PEERID TO THE PEER OBJECT
   setUpCall = (res) => {
   	this.toggleFriends();
 	  this.setState({ callingClasses: "calling calling-show" });
 		Peer.startCall(res);
   }
 
+  //ACCEPT AN INCOMING CALL
   acceptCall = () => {
   	console.log('accept call');
 		this.ring.pause();
@@ -353,15 +353,23 @@ export default class App extends Component {
 		this.setState({ callingClasses: "calling calling-show received" });
   }
 
+  //END A CALL 
   endCall = (e) => {
+  	const other = Peer.receivingUser === null ? Peer.sendAnswerTo : Peer.receivingUser;
   	this.ring.pause();
+  	this.socket.emit('endChat', other);
+  	this.terminatePeer();
+  }
+
+  //TERMINATE THE RTCPEERCONNECTION OBJECT AND END CHAT ON BOTH SIDES
+  terminatePeer = () => {
   	this.setState({ callingClasses: "calling" });
-  	this.onInitConnect(this.stream);
-		Peer.receivingUser = null;
+  	Peer.receivingUser = null;
 		Peer.sendAnswerTo = null;
 		Peer.accepted = null;
 		Peer.peerConnection.close();
-  	document.getElementById('you').muted = true;
+		this.onInitConnect(this.stream);
+		document.getElementById('you').muted = true;
   }
 
 	render = () => {
