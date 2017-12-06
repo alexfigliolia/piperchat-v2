@@ -8,7 +8,7 @@ import Menu from './components/menu/Menu';
 import Chatbox from './components/chatbox/Chatbox';
 import RemoveFriend from './components/removeFriend/RemoveFriend';
 import ReportAbuse from './components/reportAbuse/ReportAbuse';
-import Peer from './Peer';
+import Peer from './peer';
 import { alphabetize, checkSelfFriend, sortFriendsUnread } from './helpers/helpers';
 
 export default class App extends Component {
