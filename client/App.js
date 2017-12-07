@@ -299,7 +299,10 @@ export default class App extends Component {
   	this.socket.on("connect", () => this.setState({canMakeCalls: true}));
   	this.socket.on("connect_failed", () => this.setState({canMakeCalls: false}));
   	this.socket.on('disconnect', () => this.setState({canMakeCalls: false}));
-  	this.socket.on('endChat', (res) => this.terminatePeer());
+  	this.socket.on('endChat', (res) => {
+  		console.log('received end call');
+  		this.terminatePeer()
+  	});
 	}
 
 	//HANDLE CONNECTION ERROR
