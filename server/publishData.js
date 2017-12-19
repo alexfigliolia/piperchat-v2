@@ -20,7 +20,7 @@ function updateFriends(id) {
   const userFriends = list.length > 0 ? list[0].friends : [];
   const nv = [];
   for(let i = 0; i<userFriends.length; i++) {
-    nv.push(userFriends[i]._id);
+    nv.push(userFriends[i]);
   }
   friends.set(nv);
 }
