@@ -22,8 +22,6 @@ export default class Menu extends PureComponent {
 		}
 	}
 
-	logout = () => Meteor.logout();
-
 	onFocus = (e) => e.target.parentNode.classList.add('focus');
 
 	onBlur = (e) => {
@@ -70,7 +68,7 @@ export default class Menu extends PureComponent {
 				<div>
 					<div className={this.state.profClasses}>
 						<div className="image">
-							<img src={this.props.user.image} alt="me" />
+							<img src={this.props.user.image === null ? 'userpl.svg' : this.props.user.image} alt="me" />
 							<Upload
 								handleNewImage={this.props.handleNewImage} 
 								makeChanges={this.makeChanges} />
@@ -88,7 +86,7 @@ export default class Menu extends PureComponent {
 						<button onClick={this.props.toggleRemoveFriend}>Remove a Friend</button>
 						<button onClick={this.props.toggleReportAbuse}>Report Abuse</button>
 					</div>
-					<button onClick={this.logout}>Log out</button>
+					<button onClick={Meteor.logout}>Log out</button>
 					<div className={this.state.profileClasses}>
 						<div className="input">
 							<label htmlFor="pn">Name</label>

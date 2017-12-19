@@ -13,7 +13,7 @@ export default class User extends Component {
       <div 
     		className="user">
 				<div>
-					<img src={this.props.image} alt="friend" />
+					<img src={this.props.image === null ? 'userpl.svg' : this.props.image} alt="friend" />
 					<h3>{this.props.name}</h3>
 					<div className="add-new">
 						<button onClick={this.sendRequest}></button>

@@ -26,130 +26,70 @@ Meteor.methods({
     });
   },
 
-  'user.cleanName'(name) {
-    check(name, String);
-    const buddyLists = BuddyLists.find().fetch();
-    for(let i = 0; i<buddyLists.length; i++) {
-      const buddyListId = buddyLists[i]._id
-      if(buddyLists[i].friends.length > 0) {
-        for(let j = 0; j < buddyLists[i].friends.length; j++) {
-          if(buddyLists[i].friends[j]._id === Meteor.userId()) {
-            BuddyLists.update({_id: buddyListId}, {
-              $set: { ['friends.' + j + '.name']: name }
-            });
-            break;
-          }
-        }
-      }
-      if(buddyLists[i].requests.length > 0) {
-        for(let k = 0; k < buddyLists[i].requests.length; k++) {
-          if(buddyLists[i].requests[k]._id === Meteor.userId()) {
-            BuddyLists.update({_id: buddyListId}, {
-              $set: { ['requests.' + k + '.name']: name }
-            });
-            break;
-          }
-        }
-      }
-      if(buddyLists[i].sentRequests.length > 0) {
-        for(let l = 0; l < buddyLists[i].sentRequests.length; l++) {
-          if(buddyLists[i].sentRequests[l]._id === Meteor.userId()) {
-            BuddyLists.update({_id: buddyListId}, {
-              $set: { ['sentRequests.' + l + '.name']: name }
-            });
-            break;
-          }
-        }
-      }
-    }
-  },
-
   'user.addImage'(url) {
     check(url, String);
     return Meteor.users.update({ _id: Meteor.userId() }, {
       $set: { image: url }
     });
-    //Add garbage collection for old images
-    //Fetch old image from user object and delete
   },
 
-  'user.cleanImage'(url) {
-    check(url, String);
-    const buddyLists = BuddyLists.find().fetch();
-    for(let i = 0; i<buddyLists.length; i++) {
-      const buddyListId = buddyLists[i]._id
-      for(let j = 0; j < buddyLists[i].friends.length; j++) {
-        if(buddyLists[i].friends[j]._id === Meteor.userId()) {
-          BuddyLists.update({_id: buddyListId}, {
-            $set: { ['friends.' + j + '.image']: url }
-          });
-          break;
-        }
-      }
-      for(let k = 0; k < buddyLists[i].requests.length; k++) {
-        if(buddyLists[i].requests[k]._id === Meteor.userId()) {
-          BuddyLists.update({_id: buddyListId}, {
-            $set: { ['requests.' + k + '.image']: url }
-          });
-          break;
-        }
-      }
-      for(let l = 0; l < buddyLists[i].sentRequests.length; l++) {
-        if(buddyLists[i].sentRequests[l]._id === Meteor.userId()) {
-          BuddyLists.update({_id: buddyListId}, {
-            $set: { ['sentRequests.' + l + '.image']: url }
-          });
-          break;
-        }
-      }
+  'users.getObjects'(arr){
+    check(arr, Array);
+    if(arr.length > 0) {
+      const objs = Meteor.users.find(
+        { _id: { $in: arr } }, 
+        {fields: {name: 1, _id: 1, image: 1}})
+      .fetch();
+      return objs;
+    } else {
+      return [];
     }
-  }, 
+  },
 
   'user.sendRequest'(id) {
     check(id, String);
-    const user =  Meteor.users.findOne({_id: id}, { _id: 1, name: 1, image: 1});
     BuddyLists.update({owner: Meteor.userId()}, {
-      $push: { sentRequests: {name: user.name, image: user.image, _id: user._id} }
+      $push: { sentRequests: id }
     });
-    const bl = BuddyLists.find({owner: user._id}).fetch()[0];
+    const bl = BuddyLists.find({owner: id}).fetch()[0];
     const reqs = bl.requests;
     let exists = false;
     for(let i = 0; i < reqs.length; i++) {
-      if(Meteor.userId() === reqs[i]._id) exists = true;
-      break;
+      if(Meteor.userId() === reqs[i]) {
+        exists = true;
+        break;
+      }
     }
     if(!exists) {
-      return BuddyLists.update({owner: user._id}, {
-        $push: { requests: { name: Meteor.user().name, image: Meteor.user().image, _id: Meteor.userId() } }
-      })
+      return BuddyLists.update({owner: id}, {
+        $push: { requests: Meteor.userId() }
+      });
     }
   },
 
   'user.acceptRequest'(id){
     check(id, String);
-    const user =  Meteor.users.findOne({_id: id}, { _id: 1, name: 1, image: 1});
     BuddyLists.update({owner: Meteor.userId()}, {
-      $pull: { requests: {_id: user._id } },
-      $push: { friends: { name: user.name , image: user.image, _id: user._id } }
+      $pull: { requests: id },
+      $push: { friends: id }
     });
-    BuddyLists.update({owner: user._id}, {
-      $push: { friends: { name: Meteor.user().name , image: Meteor.user().image, _id: Meteor.userId() } },
-      $pull: { sentRequests: { _id: Meteor.userId()} }
+    BuddyLists.update({owner: id}, {
+      $push: { friends: Meteor.userId() },
+      $pull: { sentRequests: Meteor.userId() }
     });
   },
 
   'user.denyRequest'(id) {
     check(id, String);
-    const user =  Meteor.users.findOne({_id: id}, { _id: 1, name: 1, image: 1});
-    BuddyLists.update({owner: user._id}, {
-      $pull: { sentRequests: {_id: Meteor.userId()} }
+    BuddyLists.update({owner: id}, {
+      $pull: { sentRequests: Meteor.userId() }
     });
     const bl = BuddyLists.find({owner: Meteor.userId()}).fetch()[0];
     const reqs = bl.requests;
     for(let i = 0; i<reqs.length; i++) {
-      if(reqs[i]._id === user._id) {
+      if(reqs[i] === id) {
         BuddyLists.update({owner: Meteor.userId()}, {
-          $pull: { requests: { _id: user._id} }
+          $pull: { requests: id }
         });
         break;
       }
@@ -170,17 +110,14 @@ Meteor.methods({
   },
 
   'user.updatePresence'(){
-    // Presences.update({})
     const connectionId = this.isSimulation ? Meteor.connection._lastSessionId : this.connection.id;
-    return Presences.update({_id: connectionId}, 
-      {
-        $set: {userId: Meteor.userId(), state: 'online'}
-      });
+    return Presences.update({_id: connectionId}, {
+      $set: {userId: Meteor.userId(), state: 'online'}
+    });
   },
 
   'user.addNew'(id){
     check(id, String);
-    const user = Meteor.users.findOne({_id: id});
     Meteor.users.update({_id: id}, {
       $push: { newMessages: Meteor.userId() }
     });
@@ -188,21 +125,18 @@ Meteor.methods({
 
   'user.removeNew'(id){
     check(id, String);
-    if(Meteor.user().newMessages !== undefined){
-      Meteor.users.update({_id: Meteor.userId()}, {
-        $pull: { newMessages: id }
-      });
-    }
+    Meteor.users.update({_id: Meteor.userId()}, {
+      $pull: { newMessages: id }
+    });
   },
 
   'user.removeFriend'(id){
     check(id, String);
-    const user = Meteor.users.findOne({_id: id}, { _id: 1, name: 1, image: 1});
     BuddyLists.update({owner: id}, {
-      $pull: { friends: {_id: Meteor.userId()} }
+      $pull: { friends: Meteor.userId() }
     });
     BuddyLists.update({owner: Meteor.userId()}, {
-      $pull: { friends: { _id: id } }
+      $pull: { friends: id }
     });
     return 'Removed a friend';
   },
@@ -217,11 +151,10 @@ Meteor.methods({
 
   'convo.create'(id) {
     check(id, String);
-    const them = Meteor.users.findOne({_id: id}, { _id: 1, name: 1, image: 1});
-    const exists = Conversations.find({ owners: {$all: [them._id, Meteor.userId()]} }).fetch();
+    const exists = Conversations.find({ owners: {$all: [id, Meteor.userId()]} }).fetch();
     if(exists.length === 0) {
       return Conversations.insert({
-        owners: [them._id, Meteor.userId()]
+        owners: [id, Meteor.userId()]
       });
     }
   },
@@ -229,13 +162,12 @@ Meteor.methods({
   'message.send'(id, text){
     check(id, String);
     check(text, String);
-    const them = Meteor.users.findOne({_id: id}, { _id: 1, name: 1, image: 1});
-    const convo = Conversations.find({ owners: {$all: [them._id, Meteor.userId()]} }, {_id: 1}).fetch();
+    const convo = Conversations.find({ owners: {$all: [id, Meteor.userId()]} }, {_id: 1}).fetch();
     if(convo.length !== 0) {
       return Messages.insert({
         conversation: convo[0]._id,
-        from: {name: Meteor.user().name, image: Meteor.user().image, _id: Meteor.userId()}, 
-        to: {name: them.name, image: them.image, _id: them._id},
+        from: Meteor.userId(), 
+        to: id,
         date: new Date(),
         text: text
       });

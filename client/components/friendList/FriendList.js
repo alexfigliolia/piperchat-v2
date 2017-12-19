@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import update from 'immutability-helper';
 import List from './List';
+import { fillData } from '../../helpers/helpers';
 
 export default class FriendList extends Component {
 	constructor(props) {
@@ -9,12 +10,15 @@ export default class FriendList extends Component {
 			hasNew: [],
 			currentList: '33.33333333%',
 			text: '',
-			search: []
+			search: [],
+			requests: [],
+			sentRequests: [],
+			contacts: [],
 		}
 		this.text = new Audio("iphone_notification.mp3");
 	}
 
-	componentWillReceiveProps(nextProps) {
+	componentWillReceiveProps = (nextProps) => {
 		if(nextProps.messages.length !== this.props.messages.length && 
 			 nextProps.messages[nextProps.messages.length - 1].from._id !== Meteor.userId() && nextProps.unread.length > 0) this.text.play();
 	}

@@ -116,11 +116,11 @@ export default class Chatbox extends Component {
       			<div>
               {
                 this.props.messages.map((message, i) => {
-                  if(message.to.name === this.props.user.name && message.from.name === this.props.with.name ||
-                    message.from.name === this.props.user.name && message.to.name === this.props.with.name)
+                  if(message.to === Meteor.userId() && message.from === this.props.with._id ||
+                    message.from === Meteor.userId() && message.to === this.props.with._id)
                   return (
                     <div 
-                      className={message.from.name === this.props.user.name ? 
+                      className={message.from === Meteor.userId() ? 
                       "message message-mine" : "message message-yours"}
                       key={i}>{message.text}</div>
                   );

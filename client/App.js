@@ -58,14 +58,13 @@ export default class App extends Component {
 				this.needsAuth();
 			} else {
 				const buddyListExists = nextProps.buddyList.length > 0;
-      	const friends = alphabetize(buddyListExists ? nextProps.buddyList[0].friends : []);
-				this.letEmIn(nextProps, friends);
+				this.letEmIn(nextProps, buddyListExists);
 				const unread = nextProps.user.newMessages;
-				if(unread !== undefined && unread.length !== 0 && buddyListExists) {
-		      sortFriendsUnread(unread, alphabetize(nextProps.buddyList[0].friends))
-		        .then(ns => this.setState({contacts: ns}))
-		        .catch(err => console.log(err));
-		    }
+				// if(unread !== undefined && unread.length !== 0 && buddyListExists) {
+		  //     sortFriendsUnread(unread, alphabetize(nextProps.buddyList[0].friends))
+		  //       .then(ns => this.setState({contacts: ns}))
+		  //       .catch(err => console.log(err));
+		  //   }
 			}
 		}
 	}
@@ -86,25 +85,49 @@ export default class App extends Component {
 	}
 
 	//ALLOW ACCESS TO APP IF THE USER IS RECOGNIZED
-	letEmIn = (path, friends) => {
+	letEmIn = (path, budsExist) => {
 		this.entrance();
 		const buds = path.buddyList;
-    const fands = buds.length > 0 ? friends : [];
+    const fands = budsExist ? buds[0].friends : [];
     const newM = path.user.newMessages;
 		this.setState({ 
 			user: path.user,
-			contacts: fands,
 			search: fands,
-			requests: buds.length > 0 ? buds[0].requests : [],
-			sentRequests: buds.length > 0 ? buds[0].sentRequests : [],
 			loginClasses: "login login-show",
 			unread: newM !== undefined ? newM : []
 		});
+		if(budsExist && buds[0].friends.length !== this.state.contacts.length) {
+			this.fillContacts(buds[0].friends);
+		}
+		if(budsExist && buds[0].requests.length !== this.state.requests.length) {
+			this.fillReqs(buds[0].requests);
+		}
+		if(budsExist && buds[0].sentRequests.length !== this.state.sentRequests.length) {
+			this.fillSentReqs(buds[0].sentRequests);
+		}
 		if(buds.length > 0) {
       checkSelfFriend(path)
         .then( users => this.setState({users}) )
         .catch( err => console.log(err) );
     }
+	}
+
+	fillContacts = async (arr) => {
+	  Meteor.call('users.getObjects', arr, (err, res) => {
+	    if(err) { console.log(err) } else { this.setState({ contacts: alphabetize(res) }) }
+	  });
+	}
+
+	fillReqs = async (arr) => {
+	  Meteor.call('users.getObjects', arr, (err, res) => {
+	    if(err) { console.log(err) } else { this.setState({ requests: res }) }
+	  });
+	}
+
+	fillSentReqs = async (arr) => {
+	  Meteor.call('users.getObjects', arr, (err, res) => {
+	    if(err) { console.log(err) } else { this.setState({ sentRequests: res }) }
+	  });
 	}
 
 	//ANIMATE THE ENTRACE TO THE APP

@@ -7,16 +7,13 @@ export default class RemoveFriend extends Component {
 			selected: "",
 			confirmClasses: "confirm",
 			removeFriendClasses: "rf",
-			friends: [],
 			search: [],
 			currentSearch: ""
 		}
 	}
 
 	componentWillReceiveProps = (nextProps) => {
-		if(nextProps.friends !== this.props.friends && this.state.currentSearch === "") {
-			this.handleSearch({target: { value: ""}});
-		}
+		if(this.state.currentSearch === '') this.handleSearch({target: { value: ""}});
 	}
 
 	select = (e) => {

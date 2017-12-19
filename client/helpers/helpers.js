@@ -1,16 +1,16 @@
 import update from 'immutability-helper';
 
-function validateEmail(email) {
+export function validateEmail(email) {
     const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(email);
 }
 
-function validateName(name) {
+export function validateName(name) {
 	const bool = /^[A-Z'a-z'\s]+$/.test(name);
 	return bool ? name.trim() : false;
 }
 
-const checkSelfFriend = async (path) =>{
+export const checkSelfFriend = async (path) =>{
   if(path.users.length > 0) {
     const users = path.users;
     const friends = path.buddyList[0].friends;
@@ -22,7 +22,7 @@ const checkSelfFriend = async (path) =>{
       let isUnique = true;
       if(users[i]._id === Meteor.userId()) isUnique = false;
       for(let j = 0; j<arr.length; j++) {
-        if(users[i]._id === arr[j]._id || users[i]._id === Meteor.userId()) {
+        if(users[i]._id === arr[j] || users[i]._id === Meteor.userId()) {
           isUnique = false;
           break;
         }
@@ -33,7 +33,7 @@ const checkSelfFriend = async (path) =>{
   }
 }
 
-const sortFriendsUnread = async (unread, friends) => {
+export const sortFriendsUnread = async (unread, friends) => {
   for(let i = 0; i<friends.length; i++) {
     for(let j = 0; j<unread.length; j++) {
       if(friends[i]._id === unread[j]) {
@@ -45,7 +45,7 @@ const sortFriendsUnread = async (unread, friends) => {
   }
 }
 
-const getMessages = async (messages, id) => {
+export const getMessages = async (messages, id) => {
   const m = [];
   for(let i = 0; i<messages.length; i++) {
     const mes = messages[i];
@@ -54,7 +54,7 @@ const getMessages = async (messages, id) => {
   return m.length >= 65 ? m.slice(m.length - 65).reverse() : m.reverse();
 }
 
-function alphabetize(arr=[]){
+export function alphabetize(arr=[]){
 	return arr.sort((a, b) => {
     if(a.name < b.name) return -1;
     if(a.name > b.name) return 1;
@@ -62,7 +62,7 @@ function alphabetize(arr=[]){
   });
 }
 
-function checkIndexOf(arr, obj){
+export function checkIndexOf(arr, obj){
 	let exists = false;
 	let index = null;
 	for(let i = 0; i<arr.length; i++) {
@@ -73,14 +73,4 @@ function checkIndexOf(arr, obj){
     }
   }
   return {bool: exists, pos: index };
-}
-
-export { 
-  checkSelfFriend,
-  sortFriendsUnread, 
-  getMessages, 
-  alphabetize, 
-  checkIndexOf,
-  validateEmail, 
-  validateName
 }

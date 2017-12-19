@@ -21,7 +21,7 @@ export default class Request extends Component {
       <div 
     		className="user">
 				<div>
-					<img src={this.props.image} alt="friend" />
+					<img src={this.props.image === null ? 'userpl.svg' : this.props.image} alt="friend" />
 					<h3>{this.props.name}</h3>
 					{
 						this.props.sent ?
