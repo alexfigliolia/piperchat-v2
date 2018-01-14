@@ -120,8 +120,8 @@ Meteor.methods({
   'user.updatePresence'(){
     const connectionId = this.isSimulation ? Meteor.connection._lastSessionId : this.connection.id;
     return Presences.update({_id: connectionId}, {
-      $set: {userId: Meteor.userId(), state: 'online'}
-    });
+      $set: {userId: Meteor.userId(), state: 'online', _id: connectionId}
+    }, {upsert: true});
   },
 
   'user.removePresence'(){
