@@ -46,6 +46,14 @@ Meteor.methods({
     }
   },
 
+  'user.get'(id){
+    check(id, String);
+    return Meteor.users.find(
+      { _id: { $in: arr } }, 
+      {fields: {name: 1}})
+    .fetch();
+  },
+
   'user.sendRequest'(id) {
     check(id, String);
     BuddyLists.update({owner: Meteor.userId()}, {
