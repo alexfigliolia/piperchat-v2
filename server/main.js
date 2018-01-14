@@ -49,7 +49,7 @@ Meteor.methods({
   'user.get'(id){
     check(id, String);
     return Meteor.users.find(
-      { _id: { $in: arr } }, 
+      { _id: id }, 
       {fields: {name: 1}})
     .fetch();
   },
