@@ -124,6 +124,11 @@ Meteor.methods({
     });
   },
 
+  'user.removePresence'(){
+    const connectionId = this.isSimulation ? Meteor.connection._lastSessionId : this.connection.id;
+    return Presences.remove({_id: connectionId});
+  },
+
   'user.addNew'(id){
     check(id, String);
     Meteor.users.update({_id: id}, {
