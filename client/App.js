@@ -38,7 +38,8 @@ export default class App extends Component {
       currentChats: [],
       currentSearch: '',
       unread: [],
-      canMakeCalls: false
+      canMakeCalls: false,
+      incomingUser: null
 		}
 		this.loader = document.getElementById('appLoader');
 		this.stream = null;
@@ -301,6 +302,7 @@ export default class App extends Component {
   	Peer.init(Meteor.userId());
   	this.socket = Peer.socket;
   	this.socket.on('offer', (offer) => {
+  		this.setState({ incomingUser: offer.image });
   		console.log('on offer');
 			if(Peer.accepted === null || Peer.accepted === false) {
 				this.setState({ callingClasses: "calling calling-show receiving-call" });
@@ -343,7 +345,7 @@ export default class App extends Component {
 	}
 
 	//INITIATE A CALL => MAKE SURE FRIEND IS ONLINE => GET FRIEND'S PEERID
-  call = (id) => {
+  call = (id, image) => {
   	let isOnline = false;
   	const onlineUsers = this.props.states;
 		for(let i = 0; i < onlineUsers.length; i++) {
@@ -353,6 +355,7 @@ export default class App extends Component {
 			}
 		}
   	if(isOnline && this.state.canMakeCalls) {
+  		this.setState({ incomingUser: image });
   		Meteor.call('user.getPeerId', id, (err, res) => {
 	  		if(err) {
 	  			console.log(err);
@@ -435,7 +438,8 @@ export default class App extends Component {
 					setCallingScreen={this.setCallingScreen}
 					connectionErrorClasses={this.state.connectionErrorClasses}
 					connectionError={this.state.connectionError}
-					dismissError={this.dismissError} />
+					dismissError={this.dismissError}
+					incomingUser={this.state.incomingUser} />
 
 				{
 					this.state.loggedIn &&

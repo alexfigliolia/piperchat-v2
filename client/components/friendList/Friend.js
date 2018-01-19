@@ -25,7 +25,7 @@ export default class Friend extends Component {
 
 	call = () => {
 		if(this.props.canMakeCalls) {
-			this.props.call(this.props.id);
+			this.props.call(this.props.id, this.props.image);
 		}
 	}
 

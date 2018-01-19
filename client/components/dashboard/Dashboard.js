@@ -25,7 +25,11 @@ const Dashboard = (props) => {
 			{
 				props.loggedIn &&
 				<div className={props.classes} id="csc">
-					<div className="loader-pic"></div>
+					<div className="loader-pic">
+						<img 
+							src={props.incomingUser === null ? 'userpl.svg' : props.incomingUser}
+							alt='Who you are chatting with' />
+					</div>
 					<div className="answer-deny">
 						<button
 							onClick={props.endCall}

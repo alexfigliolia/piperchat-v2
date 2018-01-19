@@ -20,9 +20,6 @@ const Peer = {
     Peer.socket = io(window.location.protocol + '//piper-signaler.herokuapp.com',
       {reconnect: true, transports : ['websocket'], path: '/socket.io'}
     );
-    // Peer.socket = io('http://localhost:9000',
-    //   {reconnect: true, transports : ['websocket'], path: '/socket.io'}
-    // );
 		Peer.socket.emit('connected', user);
 		Peer.socket.on('offer', Peer.onOffer);
 		Peer.socket.on('uniqueID', (uniqueID) => {
@@ -98,6 +95,7 @@ const Peer = {
         Peer.socket.emit('offer', {
         	to: Peer.receivingUser, 
         	from: Meteor.user().profile.peerId,
+          fromImage: Meteor.user().image,
         	offer: JSON.stringify(offer)
         });
         console.log('making the call');

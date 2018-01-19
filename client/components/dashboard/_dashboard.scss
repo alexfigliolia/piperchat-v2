@@ -73,12 +73,16 @@
 		z-index: 11;
 		&>.loader-pic {
 			margin-top: 25px;
-			height: 50px;
-			width: 50px;
-			background: url('loader.gif') no-repeat center;
-			background-size: contain;
+			height: 130px;
+			width: 130px;
 			transform: scale(0);
 			transition-duration: 0.3s;
+			&>img {
+				height: 130px;
+				width: auto;
+				border-radius: 50%;
+				@include headerShadow;
+			}
 		}
 		&>.answer-deny {
 			position: absolute;
