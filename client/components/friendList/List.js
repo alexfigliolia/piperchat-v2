@@ -21,7 +21,8 @@ export default class List extends Component {
 								call={this.props.call}
                 unread={this.props.unread}
                 hasUnread={this.props.unread.indexOf(dude._id) !== -1}
-                canMakeCalls={this.props.canMakeCalls} />
+                canMakeCalls={this.props.canMakeCalls}
+                inCall={this.props.inCall} />
     				);
     			})
     		}

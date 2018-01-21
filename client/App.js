@@ -321,17 +321,19 @@ export default class App extends Component {
   		if(Peer.accepted) this.setState({ callingClasses: "calling calling-show received" });
   	});
   	this.socket.on('friendConnectionError', (err) => this.displayConnectionError(err));
+  	this.socket.on('busy', (err) => this.displayConnectionError(err));
   	this.socket.on("connect", () => this.setState({canMakeCalls: true}));
   	this.socket.on("connect_failed", () => this.setState({canMakeCalls: false}));
   	this.socket.on('disconnect', () => this.setState({canMakeCalls: false}));
   	this.socket.on('endChat', (res) => {
   		console.log('received end call');
-  		this.terminatePeer()
+  		this.terminatePeer();
   	});
 	}
 
 	//HANDLE CONNECTION ERROR
 	displayConnectionError = (err) => {
+		console.log('connection error');
 		this.endCall();
 		this.setState({
 			connectionErrorClasses: 'connection-error connection-error-show',
@@ -396,6 +398,7 @@ export default class App extends Component {
   	Peer.receivingUser = null;
 		Peer.sendAnswerTo = null;
 		Peer.accepted = null;
+		Peer.inCall = false;
 		Peer.peerConnection.close();
 		this.onInitConnect(this.stream);
 		document.getElementById('you').muted = true;
@@ -455,7 +458,8 @@ export default class App extends Component {
 						states={this.props.states}
 						users={this.state.users}
 						unread={this.state.unread}
-						canMakeCalls={this.state.canMakeCalls} />
+						canMakeCalls={this.state.canMakeCalls}
+						inCall={Peer.inCall} />
 				}
 
 				{

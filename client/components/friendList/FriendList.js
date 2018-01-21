@@ -110,7 +110,8 @@ export default class FriendList extends Component {
 							openChat={this.openChat}
 							call={this.props.call}
 							unread={this.props.unread}
-							canMakeCalls={this.props.canMakeCalls} />
+							canMakeCalls={this.props.canMakeCalls}
+							inCall={this.props.inCall} />
 						<List
 							for='requests'
 							requests={this.props.requests}

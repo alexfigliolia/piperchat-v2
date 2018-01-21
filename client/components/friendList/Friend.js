@@ -24,7 +24,7 @@ export default class Friend extends Component {
 	}
 
 	call = () => {
-		if(this.props.canMakeCalls) {
+		if(this.props.canMakeCalls && this.props.inCall === false) {
 			this.props.call(this.props.id, this.props.image);
 		}
 	}
@@ -51,7 +51,7 @@ export default class Friend extends Component {
 						<button onClick={this.openChat}></button>
 						<button
 							style={{
-								opacity: online && this.props.canMakeCalls ? 1 : 0.25
+								opacity: online && this.props.canMakeCalls && this.props.inCall === false ? 1 : 0.25
 							}} 
 							onClick={this.call}></button>
 					</div>
