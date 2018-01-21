@@ -334,7 +334,7 @@ export default class App extends Component {
 	//HANDLE CONNECTION ERROR
 	displayConnectionError = (err) => {
 		console.log('connection error');
-		this.endCall(true);
+		this.endCall(false);
 		this.setState({
 			connectionErrorClasses: 'connection-error connection-error-show',
       connectionError: err
@@ -385,7 +385,7 @@ export default class App extends Component {
   }
 
   //END A CALL 
-  endCall = (emit=false) => {
+  endCall = (emit=true) => {
   	if(emit) {
   		const other = Peer.receivingUser === null ? Peer.sendAnswerTo : Peer.receivingUser;
   		this.socket.emit('endChat', other);
